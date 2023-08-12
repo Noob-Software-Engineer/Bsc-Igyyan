@@ -1,0 +1,474 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: post
+    description: Everything about your Posts
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /post:
+    get:
+      summary: Get a list of posts based on specified fields
+      description: Retrieve a list of posts based on specified fields using query parameters.
+      parameters:
+        - name: filter
+          in: query
+          description: The filter object for specifying search criteria.
+          schema:
+            $ref: "#/components/schemas/PostFilter"
+      responses:
+        "200":
+          description: Successful response containing a list of posts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          description: Bad request. Invalid input or format.
+        "500":
+          description: Internal server error.
+
+    put:
+      tags:
+        - post
+      summary: Update an existing post
+      description: Update an existing post by Id
+      operationId: updatePost
+      requestBody:
+        description: Update an existent post in the store
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Post"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Post"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Post not found
+        "405":
+          description: Validation exception
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+    post:
+      tags:
+        - post
+      summary: Add a new post to the app
+      description: Add a new post to the app
+      operationId: addPost
+      requestBody:
+        description: Create a new post in the app
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+          application/xml:
+            schema:
+              $ref: "#/components/schemas/Post"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Post"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "405":
+          description: Invalid input
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+  /posts/:
+    get:
+      tags:
+        - post
+      summary: Fetch posts
+      description: Fetch posts
+      operationId: getPosts
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid status value
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+  /post/findByCompany:
+    get:
+      tags:
+        - post
+      summary: Finds Posts by company
+      description: Multiple company ids can be provided with comma separated strings
+      operationId: findPostsByCompany
+      parameters:
+        - name: companyIds
+          in: query
+          description: Company Ids that need to be considered for filter
+          required: false
+          explode: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid status value
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+  /posts/findByTags:
+    get:
+      tags:
+        - post
+      summary: Finds Posts by tags
+      description: Multiple tags can be provided with comma separated strings.
+      operationId: findPostsByTags
+      parameters:
+        - name: tags
+          in: query
+          description: Tags to filter by
+          required: false
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid tag value
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+  /post/{postId}:
+    get:
+      tags:
+        - post
+      summary: Find post by ID
+      description: Returns a single post
+      operationId: getPostById
+      parameters:
+        - name: postId
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Post"
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Post not found
+      security:
+        - api_key: []
+        - post_auth:
+            - write:posts
+            - read:posts
+    put:
+      tags:
+        - post
+      summary: Updates a post in the store with form data
+      description: ""
+      operationId: updatePostWithForm
+      parameters:
+        - name: postId
+          in: path
+          description: ID of post that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: name
+          in: query
+          description: Name of post that needs to be updated
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Status of post that needs to be updated
+          schema:
+            type: string
+      responses:
+        "405":
+          description: Invalid input
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+    delete:
+      tags:
+        - post
+      summary: Deletes a post
+      description: delete a post
+      operationId: deletePost
+      parameters:
+        - name: api_key
+          in: header
+          description: ""
+          required: false
+          schema:
+            type: string
+        - name: postId
+          in: path
+          description: Post id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "400":
+          description: Invalid post value
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+  /post/{postId}/uploadImage:
+    post:
+      tags:
+        - post
+      summary: uploads an image
+      description: ""
+      operationId: uploadFile
+      parameters:
+        - name: postId
+          in: path
+          description: ID of post to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+      security:
+        - post_auth:
+            - write:posts
+            - read:posts
+components:
+  schemas:
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: tag
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Questions
+      xml:
+        name: category
+    Post:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: name
+        details:
+          type: string
+          example: details
+        companyid:
+          type: integer
+          format: int64
+          example: 10
+        category:
+          $ref: "#/components/schemas/Category"
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        tags:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            $ref: "#/components/schemas/Tag"
+      xml:
+        name: post
+    PostFilter:
+      type: object
+      properties:
+        field_name:
+          type: string
+        creator_id:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+        tag_name:
+          type: string
+        # ... Add more filter properties if needed ...
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: "##default"
+  requestBodies:
+    Post:
+      description: Post object that needs to be added to the store
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Post"
+        application/xml:
+          schema:
+            $ref: "#/components/schemas/Post"
+  securitySchemes:
+    post_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:posts: mo dify posts in your account
+            read:posts: read your post
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
+
+      # Define the schemas for components

@@ -1,0 +1,332 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+    You can now help us improve the API whether it's by making changes to the definition itself or to the code.
+    That way, with time, we can improve the API in general, and expose some of the new features in OAS3.
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then click [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml). Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu option!_
+    
+    Some useful links:
+    - [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)
+    - [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: company
+    description: Everything about your Posts
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+paths:
+  /company:
+    put:
+      tags:
+        - company
+      summary: Update an existing company
+      description: Update an existing company by Id
+      operationId: updateCompany
+      requestBody:
+        description: Update an existing company
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: company not found
+        '405':
+          description: Validation exception
+      security:
+        - companies_auth:
+            - write:companies
+            - read:companies
+    post:
+      tags:
+        - company
+      summary: Add a new company to the app
+      description: Add a new company to the app
+      operationId: addCompany
+      requestBody:
+        description: Create a new company in the app
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '405':
+          description: Invalid input
+      security:
+        - companies_auth:
+            - write:companies
+            - read:companies
+  /company/:
+    get:
+      tags:
+        - company
+      summary: Fetch companies
+      description: Get Companies
+      operationId: getCompanies
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'          
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+        '400':
+          description: Invalid status value
+      security:
+        - companies_auth:
+            - write:companies
+            - read:companies
+  /company/{companyId}:
+    get:
+      tags:
+        - company
+      summary: Find company by ID
+      description: Returns a single company
+      operationId: getCompanyById
+      parameters:
+        - name: companyId
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Company not found
+      security:
+        - api_key: []
+        - companies_auth:
+            - write:companies
+            - read:companies
+    put:
+      tags:
+        - company
+      summary: Updates a company with form data
+      description: ''
+      operationId: updateCompanyWithForm
+      parameters:
+        - name: companyId
+          in: path
+          description: ID of company that needs to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: name
+          in: query
+          description: Name of company that needs to be updated
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Status of company that needs to be updated
+          schema:
+            type: string
+      responses:
+        '405':
+          description: Invalid input
+      security:
+        - companies_auth:
+            - write:companies
+            - read:companies
+    delete:
+      tags:
+        - company
+      summary: Deletes a company
+      description: delete a company
+      operationId: deleteCompany
+      parameters:
+        - name: api_key
+          in: header
+          description: ''
+          required: false
+          schema:
+            type: string
+        - name: companyId
+          in: path
+          description: Post id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid pet value
+      security:
+        - companies_auth:
+            - write:companies
+            - read:companies
+  /company/{companyId}/uploadImage:
+    post:
+      tags:
+        - company
+      summary: uploads an image
+      description: ''
+      operationId: uploadFile
+      parameters:
+        - name: companyId
+          in: path
+          description: ID of post to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+      security:
+        - companies_auth:
+            - write:posts
+            - read:posts
+components:
+  schemas:
+    Company:
+      required:
+        - name
+        - photoUrls
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: name
+        details:
+          type: string
+          example: details
+        companyid:
+          type: integer
+          format: int64
+          example: 10
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+      xml:
+        name: Company
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Post:
+      description: Company object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Company'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/Company'
+  securitySchemes:
+    companies_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:pets: mo dify pets in your account
+            read:pets: read your pets
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header

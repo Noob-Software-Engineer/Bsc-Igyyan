@@ -1,0 +1,251 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  description: >-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification. 
+    You can find out more about
+
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration
+    of the pet store, we've switched to the design first approach!
+
+    You can now help us improve the API whether it's by making changes to the
+    definition itself or to the code.
+
+    That way, with time, we can improve the API in general, and expose some of
+    the new features in OAS3.
+
+
+    _If you're looking for the Swagger 2.0/OAS 2.0 version of Petstore, then
+    click
+    [here](https://editor.swagger.io/?url=https://petstore.swagger.io/v2/swagger.yaml).
+    Alternatively, you can load via the `Edit > Load Petstore OAS 2.0` menu
+    option!_
+
+
+    Some useful links:
+
+    - [The Pet Store
+    repository](https://github.com/swagger-api/swagger-petstore)
+
+    - [The source API definition for the Pet
+    Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: testModel
+    description: Access to assingment related post
+
+paths:
+  /test-models/{id}:
+    get:
+      tags:
+        - testModel
+      summary: Get a test model by ID
+      description: Retrieve a test model using its unique ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the test model to retrieve.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful response containing the test model.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestModel"
+        "404":
+          description: Test model with the provided ID was not found.
+      security:
+        - OAuth2: [read]
+    delete:
+      tags:
+        - testModel
+      summary: Delete a test model by ID
+      description: Delete a test model using its unique ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the test model to delete.
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Successful response indicating successful deletion.
+        "400":
+          description: Bad request. Invalid input or format.
+        "404":
+          description: Test model with the provided ID was not found.
+        "500":
+          description: Internal server error.
+      security:
+        - OAuth2: [read, write]
+    patch:
+      tags:
+        - testModel
+      summary: Update a test model by ID
+      description: Update a test model using the provided data.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the test model to update.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTestModel"
+      responses:
+        "200":
+          description: Successful response containing the updated test model.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestModel"
+        "400":
+          description: Bad request. Invalid input or format.
+        "422":
+          description: Validation error. Input data does not meet requirements.
+        "500":
+          description: Internal server error.
+      security:
+        - OAuth2: [read, write]
+
+  /test-models:
+    get:
+      summary: Get a list of test models
+      description: Retrieve a list of test models based on search parameters.
+      parameters:
+        - name: creator_id
+          in: query
+          description: Filter by creator ID.
+          schema:
+            type: integer
+        - name: title
+          in: query
+          description: Filter by title.
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Filter by type.
+          schema:
+            type: string
+        - name: tag
+          in: query
+          description: Filter by tag.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response containing a list of test models.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TestModel"
+        "400":
+          description: Bad request. Invalid input or format.
+        "500":
+          description: Internal server error.
+
+    post:
+      tags:
+        - testModel
+      summary: Create a new test model
+      description: Create a new test model using the provided data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTestModel"
+      responses:
+        "200":
+          description: Successful response containing the created test model.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TestModel"
+        "400":
+          description: Bad request. Invalid input or format.
+        "422":
+          description: Validation error. Input data does not meet requirements.
+        "500":
+          description: Internal server error.
+      security:
+        - OAuth2: [read, write]
+
+components:
+  schemas:
+    TestModel:
+      type: object
+      properties:
+        id:
+          type: integer
+        creator_id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        reviews:
+          type: integer
+    CreateTestModel:
+      type: object
+      properties:
+        creator_id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        type:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    TestModelSearchParams:
+      type: object
+      properties:
+        creator_id:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+        tag:
+          type: string
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://your-auth-server.com/oauth/authorize
+          scopes:
+            read: Read access
+            write: Write access
