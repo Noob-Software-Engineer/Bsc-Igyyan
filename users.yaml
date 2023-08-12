@@ -1,0 +1,237 @@
+openapi: 3.0.3
+info:
+  title: Placement Portal API
+  description: |-
+    This is the Api documentation for the iGyaan Placement Portal, developed as part of the project for the Software Engineering course.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+tags:
+  - name: user
+    description: Operations about user
+paths:
+  /user/register:
+    post:
+      tags:
+        - user
+      summary: Creates a new user
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: Successfully created a new user
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      parameters:
+        - name: email
+          in: query
+          description: The email of the user
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successfully logged in user
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: Invalid username/password supplied
+  /user/logout:
+    get:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: logoutUser
+      parameters: []
+      responses:
+        default:
+          description: successful operation
+  /user/{userId}:
+    get:
+      tags:
+        - user
+      summary: Get user by user ID
+      description: ''
+      operationId: getUserByID
+      parameters:
+        - name: userId
+          in: path
+          description: 'The Id that needs to be fetched.'
+          required: true
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'          
+        '400':
+          description: Invalid User Id supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id that needs to be updated
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+  /user/public:
+    get:
+      tags:
+        - user
+      summary: Get all public users
+      description: ''
+      operationId: getPublicUsers
+      parameters:
+              []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserArray'          
+        '500':
+          description: Internal Server Error
+          
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        linkdin:
+          type: string
+          example: 'https://www.linkedin.com/in/john-doe/'
+        role:
+          type: string
+          default: student
+          enum: 
+            - student
+            - admin
+            - super
+        is_public:
+          type: boolean
+          default: false
+    UserResponse:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 1
+        username:
+          type: string
+          example: theUser
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        linkdin:
+          type: string
+          example: 'https://www.linkedin.com/in/john-doe/'
+        role:
+          type: string
+          default: student
+          enum: 
+            - student
+            - admin
+            - super
+        is_public:
+          type: boolean
+          default: false
+    UserPublic:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 1
+        username:
+          type: string
+          example: theUser
+        linkdin:
+          type: string
+          example: 'https://www.linkedin.com/in/john-doe/'
+    UserArray:
+      type: object
+      properties:
+        users:
+          type: array
+          items: 
+            $ref: '#/components/schemas/UserPublic'
