@@ -1,21 +1,10 @@
-from datetime import datetime
-import os
+import logging
 
-from pymongo.collection import Collection, ReturnDocument
-
-from flask import Flask, request, url_for, jsonify
+from flask import Flask
+from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 
 from app.api.config.config import LocalConfig
-from flask import Flask, jsonify, request
-from flask_jwt_extended import (
-    JWTManager,
-    create_access_token,
-    jwt_required,
-    get_jwt_identity,
-)
-
-import logging
 
 logging.basicConfig(
     level=logging.ERROR, format="%(asctime)s [%(levelname)s] - %(message)s"
@@ -30,6 +19,7 @@ def create_app():
 
     pymongo = PyMongo(app)
     # Configure JWT settings
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = LocalConfig.JWT_ACCESS_TOKEN_EXPIRES
     app.config[
         "JWT_SECRET_KEY"
     ] = "your-secret-key"  # Change this to a strong, random secret key
