@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, abort
+from flask import Blueprint, request, jsonify, abort, Response
 from app.api.models.user import CreateUser, GetUser, User
 from pymongo.collection import Collection, ReturnDocument
 from app.api.config.config import LocalConfig
@@ -29,5 +29,5 @@ def login(body: GetUser):
         # Create a JWT token
         access_token = create_access_token(identity=User(**user).to_json())
         return jsonify({"access_token": access_token}), 200
-    app.logger(f"No user found for {body.to_json()}")
-    abort(404, description="No user found with given details")
+    app.logger.error(f"No user found for {body.to_json()}")
+    abort(Response(status=404, response="No user found"))

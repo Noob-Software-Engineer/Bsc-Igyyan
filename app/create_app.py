@@ -15,6 +15,12 @@ from flask_jwt_extended import (
     get_jwt_identity,
 )
 
+import logging
+
+logging.basicConfig(
+    level=logging.ERROR, format="%(asctime)s [%(levelname)s] - %(message)s"
+)
+
 
 def create_app():
     # Configure Flask & Flask-PyMongo:
