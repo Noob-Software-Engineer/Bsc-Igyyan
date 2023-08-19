@@ -3,7 +3,6 @@ from pymongo.errors import DuplicateKeyError
 from flask import jsonify
 from app.api.routers.users import auth_bp
 from app.api.routers.tests import test_bp
-from fastapi import HTTPException
 
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(test_bp, url_prefix="/tests")
@@ -15,14 +14,6 @@ def resource_not_found(e):
     An error-handler to ensure that 404 errors are returned as JSON.
     """
     return jsonify(error=str(e)), 404
-
-
-@app.errorhandler(HTTPException)
-def resource_not_found(e: HTTPException):
-    """
-    An error-handler to ensure that 404 errors are returned as JSON.
-    """
-    return jsonify(e.detail), e.status_code
 
 
 @app.errorhandler(DuplicateKeyError)

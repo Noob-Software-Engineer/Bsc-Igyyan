@@ -1,5 +1,4 @@
-from fastapi import HTTPException
-from flask import Blueprint
+from flask import Blueprint, abort, Response
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_pydantic import validate
 from pymongo import ASCENDING, DESCENDING
@@ -66,7 +65,7 @@ def update_test_by_id(test_id: str, body: UpdateTestModel):
     )
     if test:
         return TestModel(**test)
-    raise HTTPException(status_code=404, detail="No test document found")
+    abort(Response(status=404, response="No test document found"))
 
 
 @test_bp.route("/<test_id>", methods=["GET"])
@@ -78,7 +77,7 @@ def get_test_by_id(test_id: str):
     if test:
         return TestModel(**test)
     app.logger.error(f"No test document find for {test_id}")
-    raise HTTPException(status_code=404, detail="No test document found")
+    abort(Response(status=404, response="No test document found"))
 
 
 @test_bp.route("/<test_id>", methods=["DELETE"])
@@ -88,4 +87,4 @@ def delete_test_by_id(test_id: str):
     count = tests.delete_one({"_id": oid(test_id)}).deleted_count
     if count == 0:
         app.logger.error(f"No test document find for {test_id}")
-        raise HTTPException(status_code=404, detail="No test document found")
+        abort(Response(status=404, response="No test document found"))

@@ -11,19 +11,22 @@ logging.basicConfig(
 )
 
 
-def create_app():
+def create_app(set_unit_test_config=False):
     # Configure Flask & Flask-PyMongo:
     app = Flask(__name__)
     # app.config["MONGO_URI"] = os.getenv("MONGO_URI")
-    app.config["MONGO_URI"] = LocalConfig.MONGO_URI
-
-    pymongo = PyMongo(app)
-    # Configure JWT settings
+    # if set_unit_test_config:
+    app.config["MONGO_URI"] = LocalConfig.MONGO_TEST_URI
+    # else:
+    # app.config["MONGO_URI"] = LocalConfig.MONGO_URI
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = LocalConfig.JWT_ACCESS_TOKEN_EXPIRES
     app.config[
         "JWT_SECRET_KEY"
-    ] = "your-secret-key"  # Change this to a strong, random secret key
+    ] = LocalConfig.JWT_SECRET_KEY  # Change this to a strong, random secret key
     jwt = JWTManager(app)
+
+    pymongo = PyMongo(app)
+    # Configure JWT settings
     return app, pymongo, jwt
 
 
