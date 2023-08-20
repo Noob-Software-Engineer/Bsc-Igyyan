@@ -6,11 +6,11 @@ from typing import Optional, Literal, Any
 from app.api.config.config import LocalConfig
 
 
-class TestType(Enum):
+class TestType(str, Enum):
     pass
 
 
-class Tags(Enum):
+class Tags(str, Enum):
     pass
 
 

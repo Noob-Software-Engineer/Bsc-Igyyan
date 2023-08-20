@@ -6,7 +6,7 @@ from typing import Optional, Literal, Any
 from app.api.config.config import LocalConfig
 
 
-class PostTags(Enum):
+class PostTags(str, Enum):
     pass
 
 

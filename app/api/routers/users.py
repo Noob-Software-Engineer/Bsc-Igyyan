@@ -10,7 +10,7 @@ from flask import current_app as app
 
 users: Collection = mongo.db[LocalConfig.USER_COLL]
 # Create a unique index on the 'field_to_index' field
-users.create_index([("name", 1)], unique=True)
+users.create_index("name", unique=True)
 
 auth_bp = Blueprint("auth", __name__)
 
