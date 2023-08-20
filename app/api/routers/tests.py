@@ -83,9 +83,10 @@ def get_test_by_id(test_id: str):
 
 @test_bp.route("/<test_id>", methods=["DELETE"])
 @jwt_required()
-@validate(on_success_status=201)
+@validate(on_success_status=204)
 def delete_test_by_id(test_id: str):
     count = tests.delete_one({"_id": oid(test_id)}).deleted_count
     if count == 0:
         app.logger.error(f"No test document find for {test_id}")
         abort(Response(status=404, response="No test document found"))
+    return Response(status=204, response="Test document deleted")
