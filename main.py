@@ -1,8 +1,10 @@
-from app.create_app import app
+from app.create_app import create_app
 from pymongo.errors import DuplicateKeyError
 from flask import jsonify
-from app.api.routers.users import auth_bp
+
+app = create_app()
 from app.api.routers.tests import test_bp
+from app.api.routers.users import auth_bp
 
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(test_bp, url_prefix="/tests")

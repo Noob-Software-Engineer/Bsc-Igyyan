@@ -2,16 +2,10 @@
 
 import pytest
 from app.create_app import create_app
-from app.api.routers.users import (
-    users,
-    auth_bp,
-)  # Import your MongoDB connection object
-from app.api.routers.tests import (
-    tests,
-    test_bp,
-)  # Import your MongoDB connection object
+
 from app.api.models.user import CreateUser
-from app.api.common.common import get_curr_time, LocalConfig
+from app.api.common.common import get_curr_time
+from app.api.config.config import LocalConfig
 from flask_pymongo import PyMongo
 
 # from main import app
@@ -19,9 +13,10 @@ from flask_pymongo import PyMongo
 
 @pytest.fixture
 def app():
-    app, pymongo, jwt = create_app(
-        set_unit_test_config=True
-    )  # Use the test configuration
+    app = create_app(set_unit_test_config=True)  # Use the test configuration
+    from app.api.routers.users import auth_bp
+    from app.api.routers.tests import test_bp
+
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(test_bp, url_prefix="/tests")
 

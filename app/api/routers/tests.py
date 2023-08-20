@@ -12,10 +12,11 @@ from app.api.models.test import (
     TestModelSearchParams,
     UpdateTestModel,
 )
+from flask import current_app as app
 from app.api.models.user import UserData
-from app.create_app import app, pymongo
+from app.create_app import mongo
 
-tests: Collection = pymongo.db[LocalConfig.TEST_COLL]
+tests: Collection = mongo.db[LocalConfig.TEST_COLL]
 # Create a unique index on the 'field_to_index' field
 # tests.create_index([("name", 1)], unique=True)
 

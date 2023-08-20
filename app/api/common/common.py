@@ -1,12 +1,10 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Optional
-from jose.jwt import encode
 from bson.errors import InvalidId
 from bson.objectid import ObjectId
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
-from app.api.config.config import LocalConfig
 
 
 class Encoder(BaseModel):
@@ -58,20 +56,3 @@ def oid(x):
         return ObjectId(x)
     except InvalidId:
         raise HTTPException(status_code=400, detail="Invalid ObjectId")
-
-
-def get_student_token():
-    payload = dict(
-        id="64e0bc377d008754b4a56f55",
-        name="ashraf",
-        email="ashraf@gmail.com",
-        password="1234",
-        role="student",
-    )
-    return encode(
-        {
-            "sub": payload,  # Replace with the actual subject (user) identifier
-            "exp": datetime.utcnow() + timedelta(hours=1),  # Token expiration time
-        },
-        key=LocalConfig.JWT_SECRET_KEY,
-    )
