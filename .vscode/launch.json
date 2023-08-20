@@ -1,13 +1,22 @@
 {
   "configurations": [
     {
-      "name": "Python: Flask",
+      "name": "Run Flask",
       "type": "python",
       "request": "launch",
       "module": "flask",
       "env": { "FLASK_APP": "main.py", "FLASK_DEBUG": "1" },
-      "args": ["run", "--no-debugger", "--reload"],
+      "args": ["run", "--debugger", "--reload"],
       "jinja": true,
+      "justMyCode": true
+    },
+    {
+      "name": "Run Unit Tests",
+      "type": "python",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/app",
+      "module": "pytest",
+      "args": ["-s", "-vv", "unit_tests/unit"],
       "justMyCode": true
     }
   ]

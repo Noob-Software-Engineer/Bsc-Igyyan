@@ -1,33 +1,14 @@
-# models/user.py
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field
-from app.api.common.common import PyObjectId
+from pydantic import Field
+from app.api.common.common import PyObjectId, Encoder, User
 from enum import Enum
 from datetime import datetime
 from typing import Optional
-from bson.objectid import ObjectId
 
 
 class Role(Enum):
     STUDENT = "student"
     ADMIN = "admin"
     SUPERADMIN = "superadmin"
-
-
-class Encoder(BaseModel):
-    class Config:
-        populate_by_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-
-    def to_json(self):
-        return jsonable_encoder(self, exclude_none=True, by_alias=False)
-
-    def to_bson(self):
-        data = self.model_dump(by_alias=True, exclude_none=True)
-        if data.get("_id") is None:
-            data.pop("_id", None)
-        return data
 
 
 class CreateUser(Encoder):
@@ -39,8 +20,12 @@ class CreateUser(Encoder):
     last_updated_at: Optional[datetime]
 
 
-class User(CreateUser):
+class UserData(CreateUser):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+
+    @property
+    def signature(self):
+        return User(id=self.id, display_name=self.name)
 
 
 class GetUser(Encoder):

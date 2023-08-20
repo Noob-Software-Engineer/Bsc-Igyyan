@@ -1,40 +1,27 @@
-from datetime import datetime
-import os
+import logging
 
-from pymongo.collection import Collection, ReturnDocument
-
-from flask import Flask, request, url_for, jsonify
+from flask import Flask
+from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 
 from app.api.config.config import LocalConfig
-from flask import Flask, jsonify, request
-from flask_jwt_extended import (
-    JWTManager,
-    create_access_token,
-    jwt_required,
-    get_jwt_identity,
-)
-
-import logging
 
 logging.basicConfig(
     level=logging.ERROR, format="%(asctime)s [%(levelname)s] - %(message)s"
 )
+mongo = PyMongo()
 
 
-def create_app():
-    # Configure Flask & Flask-PyMongo:
+def create_app(set_unit_test_config=False):
     app = Flask(__name__)
-    # app.config["MONGO_URI"] = os.getenv("MONGO_URI")
-    app.config["MONGO_URI"] = LocalConfig.MONGO_URI
-
-    pymongo = PyMongo(app)
-    # Configure JWT settings
+    if set_unit_test_config:
+        app.config["MONGO_URI"] = LocalConfig.MONGO_TEST_URI
+    else:
+        app.config["MONGO_URI"] = LocalConfig.MONGO_URI
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = LocalConfig.JWT_ACCESS_TOKEN_EXPIRES
     app.config[
         "JWT_SECRET_KEY"
-    ] = "your-secret-key"  # Change this to a strong, random secret key
+    ] = LocalConfig.JWT_SECRET_KEY  # Change this to a strong, random secret key
     jwt = JWTManager(app)
-    return app, pymongo, jwt
-
-
-app, pymongo, jwt = create_app()
+    mongo.init_app(app)
+    return app
