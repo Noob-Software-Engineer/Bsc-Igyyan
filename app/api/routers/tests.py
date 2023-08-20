@@ -32,7 +32,7 @@ def create_test(body: CreateTestModel):
         body.creator_id = user.id
     body.created_by = body.last_updated_by = user.signature
     body.last_updated_at = body.created_at = get_curr_time()
-    test_id = tests.insert_one(body.to_json()).inserted_id
+    test_id = tests.insert_one(body.to_bson()).inserted_id
     if test_id:
         test = tests.find_one({"_id": test_id})
         return TestModel(**test)

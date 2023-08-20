@@ -17,7 +17,7 @@ class Encoder(BaseModel):
         return jsonable_encoder(self, exclude_none=True, by_alias=False)
 
     def to_bson(self):
-        data = self.model_dump(by_alias=True, exclude_none=True)
+        data = self.dict(by_alias=True, exclude_none=True)
         if data.get("_id") is None:
             data.pop("_id", None)
         return data
