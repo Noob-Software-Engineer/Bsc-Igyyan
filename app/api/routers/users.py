@@ -6,6 +6,7 @@ from app.create_app import mongo
 from flask_pydantic import validate
 from flask_jwt_extended import create_access_token
 from app.api.common.common import get_curr_time
+from flask import current_app as app
 
 users: Collection = mongo.db[LocalConfig.USER_COLL]
 # Create a unique index on the 'field_to_index' field
@@ -20,7 +21,7 @@ def register_user(body: CreateUser):
     body.last_updated_at = get_curr_time()
     body.created_at = get_curr_time()
     # Handle user registration using Beanie User model
-    users.insert_one(body.to_json())
+    users.insert_one(body.to_bson())
     return jsonify({"user": body.to_json()})
 
 
