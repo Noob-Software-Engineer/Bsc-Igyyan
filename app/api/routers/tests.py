@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, Response
+from flask import Blueprint, jsonify
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_pydantic import validate
 from pymongo import ASCENDING, DESCENDING
@@ -33,8 +33,10 @@ def create_test(body: CreateTestModel):
     body.created_by = body.last_updated_by = user.signature
     body.last_updated_at = body.created_at = get_curr_time()
     test_id = tests.insert_one(body.to_json()).inserted_id
-    test = tests.find_one({"_id": test_id})
-    return TestModel(**test)
+    if test_id:
+        test = tests.find_one({"_id": test_id})
+        return TestModel(**test)
+    return jsonify({"detail": "Test document could not be stored"}), 500
 
 
 @test_bp.route("/", methods=["GET"])
@@ -66,7 +68,7 @@ def update_test_by_id(test_id: str, body: UpdateTestModel):
     )
     if test:
         return TestModel(**test)
-    abort(Response(status=404, response="No test document found"))
+    return jsonify({"detail": "No test document found"}), 404
 
 
 @test_bp.route("/<test_id>", methods=["GET"])
@@ -78,7 +80,7 @@ def get_test_by_id(test_id: str):
     if test:
         return TestModel(**test)
     app.logger.error(f"No test document find for {test_id}")
-    abort(Response(status=404, response="No test document found"))
+    return jsonify({"detail": "No test document found"}), 404
 
 
 @test_bp.route("/<test_id>", methods=["DELETE"])
@@ -88,5 +90,5 @@ def delete_test_by_id(test_id: str):
     count = tests.delete_one({"_id": oid(test_id)}).deleted_count
     if count == 0:
         app.logger.error(f"No test document find for {test_id}")
-        abort(Response(status=404, response="No test document found"))
-    return Response(status=204, response="Test document deleted")
+        return jsonify({"detail": "No test document found"}), 404
+    return jsonify({"detail": "Test document deleted"}), 200
