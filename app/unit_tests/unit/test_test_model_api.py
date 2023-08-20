@@ -39,6 +39,7 @@ def test_get_test_model_by_id(client):
     test_id = str(ObjectId())
     response = client.get(f"{base_url}/tests/{test_id}", headers=headers)
     assert response.status_code == 404
+    assert response.get_json()["detail"] == "No test document found"
 
 
 def test_search_test_model(client):
@@ -64,3 +65,17 @@ def test_search_test_model(client):
             ]
         }
     }
+
+
+def test_delete_test_model_by_id(client):
+    headers = {"Authorization": f"Bearer {get_mock_student_token()}"}
+    test_model = create_mock_test_model(client)
+    test_id = test_model["id"]
+    response = client.delete(f"{base_url}/tests/{test_id}", headers=headers)
+    assert response.status_code == 200
+    assert response.get_json()["detail"] == "Test document deleted"
+
+    test_id = str(ObjectId())
+    response = client.get(f"{base_url}/tests/{test_id}", headers=headers)
+    assert response.status_code == 404
+    assert response.get_json()["detail"] == "No test document found"
