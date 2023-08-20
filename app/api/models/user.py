@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Optional
 
 
-class Role(Enum):
+class Role(str, Enum):
     STUDENT = "student"
     ADMIN = "admin"
     SUPERADMIN = "superadmin"
