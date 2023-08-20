@@ -5,9 +5,11 @@ from flask import jsonify
 app = create_app()
 from app.api.routers.tests import test_bp
 from app.api.routers.users import auth_bp
+from app.api.routers.posts import post_bp
 
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(test_bp, url_prefix="/tests")
+app.register_blueprint(post_bp, url_prefix="/posts")
 
 
 @app.errorhandler(404)
@@ -23,6 +25,7 @@ def resource_not_found(e):
     """
     An error-handler to ensure that MongoDB duplicate key errors are returned as JSON.
     """
+    app.logger.error(e)
     return jsonify(detail=f"Duplicate key error."), 400
 
 
@@ -31,6 +34,7 @@ def resource_not_found(e):
     """
     An error-handler to ensure Exceptions are returned as JSON.
     """
+    app.logger.error(e)
     return jsonify(detail=f"Internal Server Error"), 500
 
 
