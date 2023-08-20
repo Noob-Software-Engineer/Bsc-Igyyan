@@ -18,11 +18,11 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/register", methods=["POST"])
 @validate()
 def register_user(body: CreateUser):
-    body.last_updated_at = get_curr_time()
-    body.created_at = get_curr_time()
+    body.last_updated_at = body.created_at = get_curr_time()
     # Handle user registration using Beanie User model
-    users.insert_one(body.to_bson())
-    return jsonify({"user": body.to_json()})
+    user_id = users.insert_one(body.to_bson()).inserted_id
+    user = users.find_one({"_id": user_id})
+    return UserData(**user).to_json()
 
 
 @auth_bp.route("/login", methods=["POST"])
