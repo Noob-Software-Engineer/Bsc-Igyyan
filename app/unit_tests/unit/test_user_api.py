@@ -1,5 +1,6 @@
 from app.api.config.config import LocalConfig
-from app.unit_tests.common.utils import get_mock_student_token
+
+# from app.unit_tests.common.utils import get_mock_student_token
 from bson.objectid import ObjectId
 
 base_url = LocalConfig.LOCALHOST
