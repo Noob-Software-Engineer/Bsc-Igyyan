@@ -47,7 +47,10 @@ def search_test(query: TestModelSearchParams):
     filter_criteria = query.get_criteria()
     order = ASCENDING if query.order == "asc" else DESCENDING
     test_docs = (
-        tests.find(filter_criteria).sort(query.sort_by, order).limit(query.limit)
+        tests.find(filter_criteria)
+        .sort(query.sort_by, order)
+        .skip(query.offset)
+        .limit(query.limit)
     )
     total_count = tests.count_documents(filter_criteria)
     response = [TestModel(**doc).to_json() for doc in test_docs]
@@ -85,7 +88,7 @@ def get_test_by_id(test_id: str):
 
 @test_bp.route("/<test_id>", methods=["DELETE"])
 @jwt_required()
-@validate(on_success_status=204)
+@validate()
 def delete_test_by_id(test_id: str):
     count = tests.delete_one({"_id": oid(test_id)}).deleted_count
     if count == 0:
