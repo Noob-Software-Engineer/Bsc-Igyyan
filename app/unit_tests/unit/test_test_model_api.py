@@ -16,7 +16,7 @@ def create_mock_test_model(
     if not headers:
         headers = {"Authorization": f"Bearer {get_mock_student_token()}"}
 
-    response = client.post(f"{base_url}/tests/", json=payload, headers=headers)
+    response = client.post(f"{base_url}/tests", json=payload, headers=headers)
     assert response.status_code == 201
     return response.get_json()
 
@@ -46,12 +46,12 @@ def test_search_test_model(client):
     headers = {"Authorization": f"Bearer {get_mock_student_token()}"}
     number_of_test_models = 20
     test_models = [create_mock_test_model(client) for _ in range(number_of_test_models)]
-    response = client.get(f"{base_url}/tests/?limit=5", headers=headers)
+    response = client.get(f"{base_url}/tests?limit=5", headers=headers)
     assert response.status_code == 200
     assert len(response.get_json()["tests"]) == 5
     assert response.get_json()["total_count"] == number_of_test_models
 
-    response = client.get(f"{base_url}/tests/?limit=-1", headers=headers)
+    response = client.get(f"{base_url}/tests?limit=-1", headers=headers)
     assert response.status_code == 400
     assert response.get_json() == {
         "validation_error": {

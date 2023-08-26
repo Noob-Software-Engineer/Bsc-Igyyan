@@ -13,8 +13,8 @@ class Encoder(BaseModel):
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
 
-    def to_json(self):
-        return jsonable_encoder(self, exclude_none=True, by_alias=False)
+    def to_json(self, by_alias=False):
+        return jsonable_encoder(self, exclude_none=True, by_alias=by_alias)
 
     def to_bson(self):
         data = self.dict(by_alias=True, exclude_none=True)
