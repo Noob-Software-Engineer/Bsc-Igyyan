@@ -1,16 +1,18 @@
-from flask import Blueprint, jsonify, abort, Response
-from app.api.models.user import CreateUser, GetUser, UserData
-from pymongo.collection import Collection
-from app.api.config.config import LocalConfig
-from app.create_app import mongo
-from flask_pydantic import validate
-from flask_jwt_extended import create_access_token
-from app.api.common.common import get_curr_time
+from flask import Blueprint, Response, abort
 from flask import current_app as app
+from flask import jsonify
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_pydantic import validate
+from pymongo.collection import Collection
 
-users: Collection = mongo.db[LocalConfig.USER_COLL]
+from app.api.common.common import get_curr_time, PyObjectId
+from app.api.config.config import LocalConfig
+from app.api.models.user import CreateUser, GetUser, UpdateUser, UserModel
+from app.create_app import mongo
+
+users_coll: Collection = mongo.db[LocalConfig.USER_COLL]
 # Create a unique index on the 'field_to_index' field
-users.create_index("name", unique=True)
+users_coll.create_index("name", unique=True)
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -18,20 +20,41 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/register", methods=["POST"])
 @validate()
 def register_user(body: CreateUser):
+    body.validate_super_admin()
     body.last_updated_at = body.created_at = get_curr_time()
-    # Handle user registration using Beanie User model
-    user_id = users.insert_one(body.to_bson()).inserted_id
-    user = users.find_one({"_id": user_id})
-    return UserData(**user).to_json()
+    user_id = users_coll.insert_one(body.to_bson()).inserted_id
+    user = users_coll.find_one({"_id": user_id})
+    return UserModel(**user).to_json()
 
 
 @auth_bp.route("/login", methods=["POST"])
 @validate()
 def login(body: GetUser):
-    user = users.find_one(body.to_json())
+    user = users_coll.find_one(body.to_json())
     if user:
         # Create a JWT token
-        access_token = create_access_token(identity=UserData(**user).to_json())
+        access_token = create_access_token(
+            identity=UserModel(**user).to_json(by_alias=True)
+        )
         return jsonify({"access_token": access_token}), 200
     app.logger.error(f"No user found for {body.to_json()}")
-    abort(Response(status=404, response="No user found"))
+    return jsonify({"detail": "No user found"}), 404
+
+
+@auth_bp.route("/<user_id>", methods=["PATCH"])
+@jwt_required()
+@validate()
+def update_user(user_id: PyObjectId, body: UpdateUser):
+    current_user = UserModel(**get_jwt_identity())
+    body.validate_role_change(user_id, current_user)
+    body.validate_name_change(user_id, current_user)
+    body.last_updated_at = get_curr_time()
+    body.last_updated_by = current_user.signature
+    updates = body.dict(exclude_none=True, exclude_defaults=True)
+    user = users_coll.find_one_and_update(
+        {"_id": user_id}, {"$set": updates}, return_document=True
+    )
+    if user:
+        return UserModel(**user)
+    app.logger.error(f"No user found for {user_id}")
+    return jsonify({"detail": "No user found"}), 404

@@ -12,3 +12,4 @@ class LocalConfig:
     MONGO_TEST_URI = "mongodb://localhost:27017/test_bsc"
     JWT_SECRET_KEY = "your-secret-key"
     LOCALHOST = "http://127.0.0.1:5000"
+    SUPER_ADMIN = "super_admin"
