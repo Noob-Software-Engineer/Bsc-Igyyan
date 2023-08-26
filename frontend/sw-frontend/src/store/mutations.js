@@ -7,4 +7,13 @@ export default {
       state.admin = roles.admin;
       state.student = roles.student;
     },
+    setPosts(state, posts) {
+      state.posts = posts;
+    },
+    setTests(state, tests) {
+      state.tests = tests;
+    },
+    setUsers(state, users) {
+      state.users = users
+    }
   };
