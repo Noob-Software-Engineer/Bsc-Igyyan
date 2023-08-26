@@ -4,6 +4,7 @@ from enum import Enum
 from datetime import datetime
 from typing import Optional, Literal, Any
 from app.api.config.config import LocalConfig
+from app.api.models.user import UserModel, Role
 
 
 class TestType(str, Enum):
@@ -56,8 +57,11 @@ class TestModelSearchParams(Encoder):
     review: Optional[int] = Field(ge=0, le=5)
     title: Optional[str]
 
-    def get_criteria(self):
+    def get_criteria(self, current_user: UserModel):
         filter_criteria: dict[str, Any] = {}
+        filter_criteria: dict[str, Any] = {}
+        if current_user.role not in [Role.SUPERADMIN, Role.ADMIN]:
+            self.creator_id = current_user.id
         if self.creator_id:
             filter_criteria["creator_id"] = self.creator_id
         if self.type:

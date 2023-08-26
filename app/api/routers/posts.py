@@ -4,7 +4,7 @@ from flask_pydantic import validate
 from pymongo import ASCENDING, DESCENDING
 from pymongo.collection import Collection
 
-from app.api.common.common import get_curr_time, oid, PyObjectId
+from app.api.common.common import get_curr_time, PyObjectId
 from app.api.config.config import LocalConfig
 from app.api.models.post import (
     CreatePostModel,
@@ -44,14 +44,14 @@ def search_post(query: PostModelSearchParams):
     current_user = UserModel(**get_jwt_identity())
     filter_criteria = query.get_criteria(current_user)
     order = ASCENDING if query.order == "asc" else DESCENDING
-    test_docs = (
+    post_docs = (
         posts_coll.find(filter_criteria)
         .sort(query.sort_by, order)
         .skip(query.offset)
         .limit(query.limit)
     )
     total_count = posts_coll.count_documents(filter_criteria)
-    response = [PostModel(**doc).to_json() for doc in test_docs]
+    response = [PostModel(**doc).to_json() for doc in post_docs]
 
     return {"tests": response, "total_count": total_count}
 

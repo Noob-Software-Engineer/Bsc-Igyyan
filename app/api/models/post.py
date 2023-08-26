@@ -5,7 +5,6 @@ from datetime import datetime
 from typing import Optional, Literal, Any
 from app.api.config.config import LocalConfig
 from app.api.models.user import UserModel, Role
-from fastapi import HTTPException
 
 
 class PostTag(str, Enum):
