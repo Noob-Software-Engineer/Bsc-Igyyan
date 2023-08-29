@@ -8,21 +8,54 @@
           <p>Tags: {{ test.tags.join(', ') }}</p>
         </li>
       </ul>
+      <button @click="showAddTestModal = true">Add New Test</button>
+      <!-- Add Test Modal -->
+      <add-test-modal v-if="showAddTestModal" @add="addTost" @close="showAddTestModal = false" />
     </div>
 </template>
   
 <script>
   import { computed } from 'vue';
   import { useStore } from 'vuex';
+  import AddTestModal from '../components/AddTestModal.vue';
   
   export default {
     name: 'Tests',
+    components: {
+      AddTestModal,
+    },
     setup() {
       const store = useStore();
       const tests = computed(() => store.state.tests);
+      const showAddTestModal = ref(false);
+      const addTest = async (newTest) => {
+        try {
+        // Send the new Test data to the backend
+        const url = 'http://localhost:5000/tests'; 
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${store.state.auth.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newTest),
+        });
+
+        if (response.ok) {
+          tests.value.push(newTest); // Add the new Test to the Tests array
+          showAddTestModal.value = false; // Close the modal
+        } else {
+          console.error('Error adding Test:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error adding Test:', error);
+      }
+      };
   
       return {
         tests,
+        showAddTestModal,
+        addTest
       };
     },
   };

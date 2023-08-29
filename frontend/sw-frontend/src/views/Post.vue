@@ -2,27 +2,60 @@
     <div>
       <h1>Posts</h1>
       <ul>
-        <li v-for="test in tests" :key="test.id">
-          <router-link :to="'/test/' + test.id">{{ test.title }}</router-link>
-          <p>Username: {{ test.username }}</p>
-          <p>Tags: {{ test.tags.join(', ') }}</p>
+        <li v-for="post in posts" :key="post.id">
+          <router-link :to="'/post/' + post.id">{{ post.title }}</router-link>
+          <p>Username: {{ post.username }}</p>
+          <p>Tags: {{ post.tags.join(', ') }}</p>
         </li>
       </ul>
+      <button @click="showAddPostModal = true">Add New Post</button>
+      <!-- Add Post Modal -->
+      <add-post-modal v-if="showAddPostModal" @add="addPost" @close="showAddPostModal = false" />
     </div>
 </template>
   
 <script>
   import { computed } from 'vue';
   import { useStore } from 'vuex';
+  import AddPostModal from '@/components/AddPostModal.vue';
   
   export default {
     name: 'Posts',
+    components: {
+      AddPostModal,
+    },
     setup() {
       const store = useStore();
-      const tests = computed(() => store.state.tests);
+      const posts = computed(() => store.state.posts);
+      const showAddPostModal = ref(false);
+      const addPost = async (newPost) => {
+        try {
+        // Send the new post data to the backend
+        const url = 'http://localhost:5000/posts'; 
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${store.state.auth.accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newPost),
+        });
+
+        if (response.ok) {
+          posts.value.push(newPost); // Add the new post to the posts array
+          showAddPostModal.value = false; // Close the modal
+        } else {
+          console.error('Error adding post:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error adding post:', error);
+      }
+      };
   
       return {
-        tests,
+        posts,
+        showAddPostModal,
+        addPost
       };
     },
   };
