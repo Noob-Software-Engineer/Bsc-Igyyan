@@ -66,7 +66,7 @@
             const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${store.state.auth.accessToken}`,
+                'Authorization': `Bearer ${store.state.token.value}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(newTest),

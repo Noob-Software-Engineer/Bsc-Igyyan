@@ -34,7 +34,7 @@
           const response = await fetch(url, {
             method: 'DELETE',
             headers: {
-              'Authorization': `Bearer ${store.state.auth.accessToken}`,
+              'Authorization': `Bearer ${store.state.token.value}`,
               'Content-Type': 'application/json',
             },
           });
@@ -55,7 +55,7 @@
         const response = await fetch(url, {
           method: 'PATCH',
           headers: {
-            'Authorization': `Bearer ${store.state.auth.accessToken}`,
+            'Authorization': `Bearer ${store.state.token.value}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(editedTest),

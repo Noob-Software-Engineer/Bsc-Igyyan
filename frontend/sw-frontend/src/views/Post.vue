@@ -1,6 +1,7 @@
 <template>
     <div>
       <h1>Posts</h1>
+      <search-bar-post :delay="500"></search-bar-post>
       <ul>
         <li v-for="post in posts" :key="post.id">
           <router-link :to="'/post/' + post.id">{{ post.title }}</router-link>
@@ -18,16 +19,22 @@
   import { computed } from 'vue';
   import { useStore } from 'vuex';
   import AddPostModal from '@/components/AddPostModal.vue';
+  import SearchBarPost from '@/components/SearchBarPost.vue';
   
   export default {
     name: 'Posts',
     components: {
-      AddPostModal,
-    },
+    AddPostModal,
+    SearchBarPost
+},
     setup() {
       const store = useStore();
       const posts = computed(() => store.state.posts);
       const showAddPostModal = ref(false);
+
+      onCreated(async () => {
+        await store.dispatch('fetchPosts')
+      })
       const addPost = async (newPost) => {
         try {
         // Send the new post data to the backend
@@ -35,7 +42,7 @@
         const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${store.state.auth.accessToken}`,
+            'Authorization': `Bearer ${store.state.token.value}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(newPost),

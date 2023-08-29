@@ -1,5 +1,6 @@
 <template>
     <div>
+      <search-bar-test :delay="500"></search-bar-test>
       <h1>Test</h1>
       <ul>
         <li v-for="test in tests" :key="test.id">
@@ -10,24 +11,31 @@
       </ul>
       <button @click="showAddTestModal = true">Add New Test</button>
       <!-- Add Test Modal -->
-      <add-test-modal v-if="showAddTestModal" @add="addTost" @close="showAddTestModal = false" />
+      <add-test-modal v-if="showAddTestModal" @add="addTest" @close="showAddTestModal = false" />
     </div>
 </template>
   
 <script>
   import { computed } from 'vue';
   import { useStore } from 'vuex';
-  import AddTestModal from '../components/AddTestModal.vue';
+  import AddTestModal from '@/components/AddTestModal.vue';
+import SearchBarTest from '@/components/SearchBarTest.vue';
   
   export default {
     name: 'Tests',
     components: {
-      AddTestModal,
-    },
+    AddTestModal,
+    SearchBarTest
+},
     setup() {
       const store = useStore();
       const tests = computed(() => store.state.tests);
       const showAddTestModal = ref(false);
+
+      onCreated(async () => {
+        await store.dispatch('fetchTests')
+      })
+
       const addTest = async (newTest) => {
         try {
         // Send the new Test data to the backend
@@ -35,7 +43,7 @@
         const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${store.state.auth.accessToken}`,
+            'Authorization': `Bearer ${store.state.token.value}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(newTest),

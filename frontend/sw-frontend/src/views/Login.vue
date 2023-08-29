@@ -58,10 +58,8 @@
                         admin: false,
                         student: true,
                     })
-                    
+                    store.commit('setToken', data.access_token)
                     console.log(store)
-                    localStorage.setItem('auth', decoded.auth_level)
-                    localStorage.setItem('displayName', decoded.displayName)
                     
                     router.push('/')
 

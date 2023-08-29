@@ -5,5 +5,6 @@ export default {
     student: false,
     posts: [], 
     tests: [],
-    users: [], 
+    users: [],
+    token: null,
 };

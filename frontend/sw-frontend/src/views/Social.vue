@@ -18,6 +18,10 @@
     setup() {
       const store = useStore();
       const users = computed(() => store.state.users);
+
+      onCreated(async () => {
+        await store.dispatch('fetchUsers')
+      })
   
       return {
         users,
