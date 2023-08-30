@@ -1,5 +1,6 @@
 <template>
     <div>
+    <navbar></navbar>
       <h1>Posts</h1>
       <search-bar-post :delay="500"></search-bar-post>
       <ul>
@@ -20,12 +21,14 @@
   import { useStore } from 'vuex';
   import AddPostModal from '@/components/AddPostModal.vue';
   import SearchBarPost from '@/components/SearchBarPost.vue';
+  import Navbar from '@/components/Navbar.vue';
   
   export default {
     name: 'Posts',
     components: {
     AddPostModal,
-    SearchBarPost
+    SearchBarPost,
+    Navbar,
 },
     setup() {
       const store = useStore();

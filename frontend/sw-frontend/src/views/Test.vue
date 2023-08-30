@@ -1,7 +1,8 @@
 <template>
     <div>
-      <search-bar-test :delay="500"></search-bar-test>
+      <navbar></navbar>
       <h1>Test</h1>
+      <search-bar-test :delay="500"></search-bar-test>
       <ul>
         <li v-for="test in tests" :key="test.id">
           <router-link :to="'/test/' + test.id">{{ test.title }}</router-link>
@@ -19,13 +20,15 @@
   import { onMounted,ref, computed } from 'vue';
   import { useStore } from 'vuex';
   import AddTestModal from '@/components/AddTestModal.vue';
-import SearchBarTest from '@/components/SearchBarTest.vue';
+  import SearchBarTest from '@/components/SearchBarTest.vue';
+  import Navbar from '@/components/Navbar.vue';
   
   export default {
     name: 'Tests',
     components: {
     AddTestModal,
-    SearchBarTest
+    SearchBarTest,
+    Navbar
 },
     setup() {
       const store = useStore();

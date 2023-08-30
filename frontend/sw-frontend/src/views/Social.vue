@@ -1,4 +1,5 @@
 <template>
+  <navbar></navbar>
     <div class="user-list">
       <h1>Connect</h1>
       <user-card v-for="user in users" :key="user.id" :user="user" />
@@ -7,12 +8,14 @@
   
 <script>
   import UserCard from '@/components/UserCard.vue';
+  import Navbar from '@/components/Navbar.vue';
   import { onMounted,computed } from 'vue';
   import { useStore } from 'vuex';
   
   export default {
     components: {
       UserCard,
+      Navbar,
     },
     name: 'Users',
     setup() {
