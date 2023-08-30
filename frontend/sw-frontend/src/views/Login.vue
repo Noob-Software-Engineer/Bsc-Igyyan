@@ -43,7 +43,7 @@
                 }       
                 fetch(url, {
                     method: 'POST',
-                    credentials: 'include',
+                    // credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json'
                     },

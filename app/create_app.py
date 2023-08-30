@@ -15,7 +15,7 @@ mongo = PyMongo()
 
 def create_app(set_unit_test_config=False):
     app = Flask(__name__)
-    CORS(app, origins="*", supports_credentials=True, send_wildcard=True)
+    CORS(app, origins="*", supports_credentials=False, send_wildcard=True, )
     if set_unit_test_config:
         app.config["MONGO_URI"] = LocalConfig.MONGO_TEST_URI
     else:
