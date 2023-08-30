@@ -17,6 +17,7 @@
   
 <script>
   import { ref, computed } from 'vue';
+  import { useRouter} from 'vue-router';
   import { useStore } from 'vuex';
   import EditTestModal from '@/components/EditTestModal.vue';
   
@@ -28,6 +29,7 @@
     },
     setup(props) {
       const store = useStore();
+      const router = useRouter();
       const test = computed(() => store.state.tests.tests.find(p => p.id === props.id));
       const showEditModal = ref(false);
       const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === test.value.created_by.display_name);
@@ -44,7 +46,7 @@
           });
 
           if (response.ok) {
-            router.push('./tests')
+            router.push('../tests')
             // Handle successful deletion, e.g., navigate back to the home page
           } else {
             console.error('Error deleting profile:', response.statusText);

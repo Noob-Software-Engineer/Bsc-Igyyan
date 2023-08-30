@@ -8,6 +8,7 @@
         <li v-for="test in tests.tests" :key="test.id" class="list-group-item">
           <router-link :to="'/test/' + test.id">{{ test.title }}</router-link>
           <p>Username: {{ test.created_by.display_name }}</p>
+          <p>Type: {{ test.type }}</p>
           <p>Tags: {{ test.tag }}</p>
         </li>
       </ul>

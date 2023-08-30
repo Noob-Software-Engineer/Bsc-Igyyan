@@ -15,6 +15,7 @@
   
 <script>
   import { ref, computed } from 'vue';
+  import { useRouter} from 'vue-router';
   import { useStore } from 'vuex';
   import EditPostModal from '@/components/EditPostModal.vue';
   
@@ -26,6 +27,7 @@
     },
     setup(props) {
       const store = useStore();
+      const router = useRouter();
       const post = computed(() => store.state.posts.posts.find(p => p.id === props.id));
       const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === post.value.created_by.display_name);
       const showEditModal = ref(false);
@@ -41,9 +43,8 @@
               'Content-Type': 'application/json',
             },
           });
-
           if (response.ok) {
-            router.push('./posts')
+            router.push('../posts')
             // Handle successful deletion, e.g., navigate back to the list
           } else {
             console.error('Error deleting post:', response.statusText);
