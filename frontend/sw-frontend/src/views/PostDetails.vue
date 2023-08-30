@@ -27,7 +27,7 @@
     setup(props) {
       const store = useStore();
       const post = computed(() => store.state.posts.posts.find(p => p.id === props.id));
-      const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === post.created_by.display_name);
+      const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === post.value.created_by.display_name);
       const showEditModal = ref(false);
 
       const deletePost = async () => {

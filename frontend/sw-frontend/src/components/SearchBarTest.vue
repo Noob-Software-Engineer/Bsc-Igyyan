@@ -40,7 +40,7 @@
         watchEffect(async () => {
           if (searchTerm.value.length >= 3) {
             // Fetch posts based on search term
-            const url = `http://localhost:5000/tests/${searchTerm.value}`;
+            const url = `http://localhost:5000/tests?=${searchTerm.value}`;
             const response = await fetch(url, {
               method: 'GET',
               headers: {
