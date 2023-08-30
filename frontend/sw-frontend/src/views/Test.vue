@@ -1,19 +1,21 @@
 <template>
-    <div>
-      <navbar></navbar>
+  <div>
+    <navbar></navbar>
+    <div class="container my-4">
       <h1>Test</h1>
       <search-bar-test :delay="500"></search-bar-test>
-      <ul>
-        <li v-for="test in tests" :key="test.id">
+      <ul class="list-group">
+        <li v-for="test in tests" :key="test.id" class="list-group-item">
           <router-link :to="'/test/' + test.id">{{ test.title }}</router-link>
           <p>Username: {{ test.username }}</p>
           <p>Tags: {{ test.tags.join(', ') }}</p>
         </li>
       </ul>
-      <button @click="showAddTestModal = true">Add New Test</button>
+      <button class="btn btn-primary mt-2" @click="showAddTestModal = true">Add New Test</button>
       <!-- Add Test Modal -->
       <add-test-modal v-if="showAddTestModal" @add="addTest" @close="showAddTestModal = false" />
     </div>
+  </div>
 </template>
   
 <script>

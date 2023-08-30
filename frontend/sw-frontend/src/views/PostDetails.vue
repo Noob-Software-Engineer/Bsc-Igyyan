@@ -1,15 +1,16 @@
 <template>
-    <div>
-      <h2>{{ post.title }}</h2>
-      <p>Username: {{ post.username }}</p>
-      <p>Tags: {{ post.tags.join(', ') }}</p>
-      <p>{{ post.content }}</p> 
-      <!-- Show delete button if the user is the creator -->
-      <button v-if="isCurrentUserCreator" @click="deletePost">Delete Post</button>
-      <button v-if="isCurrentUserCreator" @click="showEditModal = true">Edit Post</button>
-      <!-- Edit Post Modal -->
-      <edit-post-modal v-if="showEditModal" :post="post" @edit="updatePost" @close="showEditModal = false" />
+  <div class="container my-4">
+    <h2>{{ post.title }}</h2>
+    <p>Username: {{ post.username }}</p>
+    <p>Tags: {{ post.tags.join(', ') }}</p>
+    <p>{{ post.content }}</p> 
+    <div v-if="isCurrentUserCreator">
+      <button class="btn btn-danger" @click="deletePost">Delete Post</button>
+      <button class="btn btn-primary" @click="showEditModal = true">Edit Post</button>
     </div>
+    <!-- Edit Post Modal -->
+    <edit-post-modal v-if="showEditModal" :post="post" @edit="updatePost" @close="showEditModal = false" />
+  </div>
 </template>
   
 <script>

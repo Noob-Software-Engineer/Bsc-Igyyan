@@ -1,35 +1,50 @@
 <template>
-    <div class="modal-overlay">
+  <div class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <h2>Add New Test</h2>
-        <form @submit.prevent="addTest">
-          <!-- Form inputs for Test data -->
-          <label for="title">Title:</label>
-          <input type="text" v-model="title" required>
-          
-          <label for="content">Content:</label>
-          <input type="text" v-model="content" required>
-
-          <label for="type">Type:</label>
-          <select v-model="selectedType">
-            <option v-for="type in availableType" :key="type" :value="type">{{ type }}</option>
-          </select>
-
-          <label for="tags">Tags:</label>
-          <select v-model="selectedTags" multiple>
-            <option v-for="tag in availableTags" :key="tag" :value="tag">{{ tag }}</option>
-          </select>
-
-          <label for="review">Review:</label>
-          <select v-model="selectedReview">
-            <option v-for="score in reviewScores" :key="score" :value="score">{{ score }}</option>
-          </select>
-          
-          <button type="submit">Add Test</button>
-        </form>
-        <button @click="closeModal">Close</button>
+        <div class="modal-header">
+          <h2 class="modal-title">Add New Test</h2>
+          <button type="button" class="close" @click="closeModal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="addTest">
+            <!-- Form inputs for Test data -->
+            <div class="form-group">
+              <label for="title">Title:</label>
+              <input type="text" class="form-control" v-model="title" required>
+            </div>
+            <div class="form-group">
+              <label for="content">Content:</label>
+              <input type="text" class="form-control" v-model="content" required>
+            </div>
+            <div class="form-group">
+              <label for="type">Type:</label>
+              <select class="form-control" v-model="selectedType">
+                <option v-for="type in availableType" :key="type" :value="type">{{ type }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="tags">Tags:</label>
+              <select class="form-control" v-model="selectedTags" multiple>
+                <option v-for="tag in availableTags" :key="tag" :value="tag">{{ tag }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="review">Review:</label>
+              <select class="form-control" v-model="selectedReview">
+                <option v-for="score in reviewScores" :key="score" :value="score">{{ score }}</option>
+              </select>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Add Test</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
+  </div>
 </template>
   
 <script>

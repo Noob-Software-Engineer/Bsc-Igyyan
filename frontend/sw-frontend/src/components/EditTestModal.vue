@@ -1,16 +1,27 @@
 <template>
-    <div class="modal-overlay">
+  <div class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
-        <h2>Edit Test</h2>
-        <form @submit.prevent="editTest">
-          <label for="content">Content:</label>
-          <input type="text" v-model="editedContent" required>
-            
-          <button type="submit">Save Changes</button>
-        </form>
-        <button @click="closeModal">Cancel</button>
+        <div class="modal-header">
+          <h2 class="modal-title">Edit Test</h2>
+          <button type="button" class="close" @click="closeModal">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form @submit.prevent="editTest">
+            <div class="form-group">
+              <label for="content">Content:</label>
+              <input type="text" class="form-control" v-model="editedContent" required>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
+  </div>
 </template>
   
 <script>

@@ -1,14 +1,19 @@
 <template>
-    <div>
+  <div>
+    <navbar></navbar>
+    <div class="container my-4">
       <h2>{{ test.title }}</h2>
       <p>Username: {{ test.username }}</p>
       <p>Tags: {{ test.tags.join(', ') }}</p>
       <p>{{ test.content }}</p>
-      <button v-if="isCurrentUserCreator" @click="deleteTest">Delete Test</button>
-      <button v-if="isCurrentUserCreator" @click="showEditModal = true">Edit Test</button>
+      <div class="mt-2" v-if="isCurrentUserCreator">
+        <button class="btn btn-danger mr-2" @click="deleteTest">Delete Test</button>
+        <button class="btn btn-primary" @click="showEditModal = true">Edit Test</button>
+      </div>
       <!-- Edit Test Modal -->
       <edit-test-modal v-if="showEditModal" :test="test" @edit="updateTest" @close="showEditModal = false" />
     </div>
+  </div>
 </template>
   
 <script>

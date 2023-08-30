@@ -1,11 +1,25 @@
 <template>
-    <div class="search-bar">
-      <input v-model="searchTerm" @input="searchTests" placeholder="Search for tests...">
-      <ul v-if="searchResults.length > 0">
-        <li v-for="post in searchResults" :key="post.id">{{ post.title }}</li>
-      </ul>
-      <p v-else>No results found.</p>
+  <div class="search-bar">
+    <div class="input-group">
+      <input
+        class="form-control"
+        v-model="searchTerm"
+        @input="searchTests"
+        placeholder="Search for tests by title..."
+      />
+      <div class="input-group-append">
+        <button class="btn btn-primary" type="button" @click="searchTests">
+          Search
+        </button>
+      </div>
     </div>
+    <ul class="list-group mt-2" v-if="searchResults.length > 0">
+      <li class="list-group-item" v-for="test in searchResults" :key="test.id">
+        {{ test.title }}
+      </li>
+    </ul>
+    <p class="mt-2" v-else>No results found.</p>
+  </div>
 </template>
   
 <script>

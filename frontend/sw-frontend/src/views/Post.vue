@@ -1,19 +1,23 @@
 <template>
-    <div>
+  <div>
     <navbar></navbar>
-      <h1>Posts</h1>
-      <search-bar-post :delay="500"></search-bar-post>
-      <ul>
-        <li v-for="post in posts" :key="post.id">
+    <div class="container">
+      <h1 class="my-4">Posts</h1>
+      <div class="mb-4">
+        <search-bar-post :delay="500"></search-bar-post>
+      </div>
+      <ul class="list-group">
+        <li v-for="post in posts" :key="post.id" class="list-group-item">
           <router-link :to="'/post/' + post.id">{{ post.title }}</router-link>
-          <p>Username: {{ post.username }}</p>
+          <p class="mb-0">Username: {{ post.username }}</p>
           <p>Tags: {{ post.tags.join(', ') }}</p>
         </li>
       </ul>
-      <button @click="showAddPostModal = true">Add New Post</button>
+      <button @click="showAddPostModal = true" class="btn btn-primary mt-4">Add New Post</button>
       <!-- Add Post Modal -->
       <add-post-modal v-if="showAddPostModal" @add="addPost" @close="showAddPostModal = false" />
     </div>
+  </div>
 </template>
   
 <script>
