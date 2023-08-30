@@ -2,6 +2,7 @@ from app.create_app import create_app
 from pymongo.errors import DuplicateKeyError
 from flask import jsonify
 from fastapi import HTTPException
+from pydantic import ValidationError
 
 app = create_app()
 from app.api.routers.tests import test_bp
@@ -44,6 +45,15 @@ def resource_not_found(e):
     """
     app.logger.error(e)
     return jsonify(detail=f"Duplicate key error."), 400
+
+
+@app.errorhandler(ValidationError)
+def resource_not_found(ve: ValidationError):
+    """
+    An error-handler to ensure ValidationError are returned as JSON.
+    """
+    app.logger.error(ve.json())
+    return ve.json(), 422
 
 
 @app.errorhandler(HTTPException)
