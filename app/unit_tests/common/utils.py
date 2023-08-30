@@ -9,7 +9,9 @@ def get_mock_student_token():
         name="ashraf",
         email="ashraf@gmail.com",
         password="1234",
-        role="student",
+        role="admin",
+        display_name="ashraf",
+        social_link="https://stackoverflow.com/questions/70313289/how-to-accept-urls-without-a-protocol",
     )
     return encode(
         {

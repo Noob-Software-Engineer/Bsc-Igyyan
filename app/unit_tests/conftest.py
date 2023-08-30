@@ -51,6 +51,8 @@ def setup_test_data(test_db):
         email="ashraf@gmail.com",
         password="1234",
         role="student",
+        display_name="ashraf",
+        social_link="https://stackoverflow.com/questions/70313289/how-to-accept-urls-without-a-protocol",
         created_at=get_curr_time(),
         last_updated_at=get_curr_time(),
     )
