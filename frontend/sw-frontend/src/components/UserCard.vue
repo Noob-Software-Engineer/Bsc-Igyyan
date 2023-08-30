@@ -1,11 +1,9 @@
 <template>
   <div class="card user-card">
     <div class="card-body">
-      <h3 class="card-title">{{ user.username }}</h3>
-      <p class="card-text">Skills: {{ user.skills.join(', ') }}</p>
+      <h3 class="card-title">{{ user.display_name }}</h3>
       <p class="card-text">
-        LinkedIn:
-        <a :href="user.linkedin" target="_blank" class="btn btn-primary">Visit LinkedIn</a>
+        <a :href="user.social_link" target="_blank" class="btn btn-primary">Connect</a>
       </p>
     </div>
   </div>

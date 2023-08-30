@@ -54,7 +54,7 @@ export default {
           'Content-Type': 'application/json', 
         };
   
-        const response = await fetch('http://localhost:5000/users', {
+        const response = await fetch('http://localhost:5000/auth', {
           headers,
         });
   

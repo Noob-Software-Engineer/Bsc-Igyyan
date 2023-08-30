@@ -62,6 +62,7 @@ def update_user(user_id: PyObjectId, body: UpdateUser):
 
 
 @auth_bp.route("", methods=["GET"])
+@jwt_required() 
 @validate()
 def search_user(query: SearchUser):
     current_user = UserModel(**get_jwt_identity())
@@ -76,4 +77,4 @@ def search_user(query: SearchUser):
     total_count = users_coll.count_documents(filter_criteria)
     response = [UserModel(**doc).to_json() for doc in user_docs]
 
-    return {"posts": response, "total_count": total_count}
+    return {"users": response, "total_count": total_count}

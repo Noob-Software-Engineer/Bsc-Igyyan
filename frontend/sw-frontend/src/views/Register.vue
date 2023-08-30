@@ -23,6 +23,14 @@
                   <label for="password" class="form-label">Password:</label>
                   <input type="password" v-model="password" name="password" class="form-control" required>
                 </div>
+                <div class="mb-3">
+                  <label for="socialLink" class="form-label">Socials:</label>
+                  <input type="url" v-model="socialLink" name="socialLink" class="form-control" required>
+                </div>
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="isPublic" v-model="isPublic">
+                  <label class="form-check-label" for="isPublic">Make your profile public?</label>
+                </div>
                 <div class="container text-center">
                   <button type="submit" class="btn btn-primary">Register</button>
                 </div>
@@ -43,6 +51,8 @@
             const displayName = ref('')
             const password = ref('')
             const email = ref('')
+            const socialLink = ref('')
+            const isPublic = ref(true)
             const router = useRouter()
             const register = () => {
                 const url = 'http://localhost:5000/auth/register'
@@ -51,7 +61,9 @@
                     display_name: displayName.value,
                     password: password.value,
                     email: email.value,
-                    role: 'student'
+                    role: 'student',
+                    social_link: socialLink.value,
+                    is_public: isPublic.value,
                 }
                 console.log(JSON.stringify(data))
 
@@ -74,6 +86,8 @@
                 displayName,
                 password,
                 email,
+                socialLink,
+                isPublic,
                 register
             }
         }

@@ -5,7 +5,7 @@
       <h1 class="mb-4">Connect</h1>
       <div class="row">
         <user-card
-          v-for="user in users"
+          v-for="user in users.users"
           :key="user.id"
           :user="user"
           class="col-lg-4 col-md-6 mb-4"
@@ -30,7 +30,6 @@
     setup() {
       const store = useStore();
       const users = computed(() => store.state.users);
-
       onMounted(async () => {
         await store.dispatch('fetchUsers')
       })
