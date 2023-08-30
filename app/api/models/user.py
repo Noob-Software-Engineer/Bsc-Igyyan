@@ -1,8 +1,8 @@
-from pydantic import Field
+from pydantic import Field, EmailStr, AnyHttpUrl
 from app.api.common.common import PyObjectId, Encoder, User
 from enum import Enum
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal, Any
 from app.api.config.config import LocalConfig
 from fastapi import HTTPException
 
@@ -18,9 +18,13 @@ class CreateUser(Encoder):
     display_name: str = Field(
         ..., description="User's can have any duplicate name to have anonymity"
     )
-    email: str
+    email: EmailStr
     password: str
     role: Role
+    social_link: AnyHttpUrl
+    is_public: bool = Field(
+        default=True, description="Indicate whther user is publicaly avaiable or not"
+    )
     created_at: Optional[datetime]
     last_updated_at: Optional[datetime]
 
@@ -70,3 +74,26 @@ class UpdateUser(Encoder):
                 status_code=403,
                 detail="Not authorized to change other user's display name",
             )
+
+
+class SearchUser(Encoder):
+    display_name: Optional[str]
+    sort_by: Literal["created_at", "last_updated_at"] = "last_updated_at"
+    order: Literal["asc", "desc"] = "desc"
+    offset: int = Field(default=0, ge=0)
+    limit: int = Field(
+        default=LocalConfig.DEFAULT_ITEMS_PER_PAGE,
+        le=LocalConfig.MAX_ITEMS_PER_PAGE,
+        ge=0,
+    )
+
+    def get_criteria(self, current_user: UserModel):
+        filter_criteria: dict[str, Any] = {}
+        if current_user.role == Role.STUDENT:
+            filter_criteria["is_public"] = True
+        if self.display_name:
+            filter_criteria["display_name"] = {
+                "$regex": f"^.*{self.display_name}.*",
+                "$options": "i",
+            }
+        return filter_criteria

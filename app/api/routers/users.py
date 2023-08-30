@@ -4,10 +4,11 @@ from flask import jsonify
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 from flask_pydantic import validate
 from pymongo.collection import Collection
+from pymongo import ASCENDING, DESCENDING
 
 from app.api.common.common import get_curr_time, PyObjectId
 from app.api.config.config import LocalConfig
-from app.api.models.user import CreateUser, GetUser, UpdateUser, UserModel
+from app.api.models.user import CreateUser, GetUser, UpdateUser, UserModel, SearchUser
 from app.create_app import mongo
 
 users_coll: Collection = mongo.db[LocalConfig.USER_COLL]
@@ -58,3 +59,21 @@ def update_user(user_id: PyObjectId, body: UpdateUser):
         return UserModel(**user)
     app.logger.error(f"No user found for {user_id}")
     return jsonify({"detail": "No user found"}), 404
+
+
+@auth_bp.route("", methods=["GET"])
+@validate()
+def search_user(query: SearchUser):
+    current_user = UserModel(**get_jwt_identity())
+    filter_criteria = query.get_criteria(current_user)
+    order = ASCENDING if query.order == "asc" else DESCENDING
+    user_docs = (
+        users_coll.find(filter_criteria)
+        .sort(query.sort_by, order)
+        .skip(query.offset)
+        .limit(query.limit)
+    )
+    total_count = users_coll.count_documents(filter_criteria)
+    response = [UserModel(**doc).to_json() for doc in user_docs]
+
+    return {"posts": response, "total_count": total_count}
