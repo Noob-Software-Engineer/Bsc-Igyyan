@@ -35,8 +35,9 @@
             const router = useRouter()
             const name = ref('')
             const password = ref('')
+            const BASE_URL = import.meta.env.VITE_API
             const login = () => {
-                const url = 'http://localhost:5000/auth/login'
+                const url = `${BASE_URL}/auth/login`
                 let data = {
                     name: name.value,
                     password: password.value

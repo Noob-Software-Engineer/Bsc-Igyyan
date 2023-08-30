@@ -38,6 +38,7 @@
       const store = useStore();
       const posts = computed(() => store.state.posts);
       const showAddPostModal = ref(false);
+      const BASE_URL = import.meta.env.VITE_API
 
       onMounted(async () => {
         await store.dispatch('fetchPosts')
@@ -45,7 +46,7 @@
       const addPost = async (newPost) => {
         try {
         // Send the new post data to the backend
-        const url = 'http://localhost:5000/posts'; 
+        const url = `${BASE_URL}/posts`; 
         const response = await fetch(url, {
           method: 'POST',
           headers: {

@@ -33,10 +33,11 @@
       const test = computed(() => store.state.tests.tests.find(p => p.id === props.id));
       const showEditModal = ref(false);
       const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === test.value.created_by.display_name);
+      const BASE_URL = import.meta.env.VITE_API
     
       const deleteTest = async () => {
         try {
-          const url = `http://localhost:5000/tests/${props.id}`;
+          const url = `${BASE_URL}/tests/${props.id}`;
           const response = await fetch(url, {
             method: 'DELETE',
             headers: {
@@ -57,7 +58,7 @@
       };
       const updateTest = async (editedTest) => {
       try {
-        const url = `http://localhost:5000/tests/${props.id}`;
+        const url = `${BASE_URL}/tests/${props.id}`;
         const response = await fetch(url, {
           method: 'PATCH',
           headers: {

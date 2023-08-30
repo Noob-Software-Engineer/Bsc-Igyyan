@@ -54,8 +54,9 @@
             const socialLink = ref('')
             const isPublic = ref(true)
             const router = useRouter()
+            const BASE_URL = import.meta.env.VITE_API
             const register = () => {
-                const url = 'http://localhost:5000/auth/register'
+                const url = `${BASE_URL}/auth/register`
                 let data = {
                     name: name.value,
                     display_name: displayName.value,

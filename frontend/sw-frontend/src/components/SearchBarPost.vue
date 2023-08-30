@@ -32,12 +32,14 @@ export default {
     const store = useStore();
     const searchTerm = ref('');
     const searchResults = ref([]);
+    const BASE_URL = import.meta.env.VITE_API
+
 
     // Watcher for fetching search results
     
     const fetchResults = async () => {
       if (searchTerm.value.length >= 3) {
-        const url = `http://localhost:5000/posts?title=${searchTerm.value}`;
+        const url = `${BASE_URL}/posts?title=${searchTerm.value}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {
@@ -59,7 +61,7 @@ export default {
     };
     watch(searchTerm, async (newSearchTerm) => {
       if (newSearchTerm.length >= 3) {
-        const url = `http://localhost:5000/posts?title=${newSearchTerm}`;
+        const url = `${BASE_URL}/posts?title=${newSearchTerm}`;
         const response = await fetch(url, {
           method: 'GET',
           headers: {
