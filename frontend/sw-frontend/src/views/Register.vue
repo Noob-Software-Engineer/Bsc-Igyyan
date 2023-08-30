@@ -42,11 +42,12 @@
                 const url = 'http://localhost:5000/auth/register'
                 let data = {
                     name: name.value,
-                    displayName: displayName.value,
+                    display_name: displayName.value,
                     password: password.value,
                     email: email.value,
                     role: 'student'
                 }
+                console.log(JSON.stringify(data))
 
                 fetch(url, {
                     method: 'POST',
@@ -58,7 +59,7 @@
                 })
                 .then(res => res.json())
                 .then(data => {
-                    router.push('/auth/login')
+                    router.push('/login')
                 })
             }
         

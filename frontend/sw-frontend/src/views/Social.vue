@@ -7,7 +7,7 @@
   
 <script>
   import UserCard from '@/components/UserCard.vue';
-  import { computed } from 'vue';
+  import { onMounted,computed } from 'vue';
   import { useStore } from 'vuex';
   
   export default {
@@ -19,7 +19,7 @@
       const store = useStore();
       const users = computed(() => store.state.users);
 
-      onCreated(async () => {
+      onMounted(async () => {
         await store.dispatch('fetchUsers')
       })
   

@@ -53,7 +53,7 @@ def search_post(query: PostModelSearchParams):
     total_count = posts_coll.count_documents(filter_criteria)
     response = [PostModel(**doc).to_json() for doc in post_docs]
 
-    return {"tests": response, "total_count": total_count}
+    return {"posts": response, "total_count": total_count}
 
 
 @post_bp.route("/<post_id>", methods=["PATCH"])

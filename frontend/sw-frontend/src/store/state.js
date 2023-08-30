@@ -1,8 +1,6 @@
 export default {
-    displayName: null,
-    admin: false,
-    superAdmin: false,
-    student: false,
+    name: null,
+    role: null,
     posts: [], 
     tests: [],
     users: [],

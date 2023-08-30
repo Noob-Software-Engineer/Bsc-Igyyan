@@ -1,7 +1,9 @@
+import state from "./state";
+
 export default {
     async fetchPosts({commit}) {
       try {
-        const token = rootState.auth.accessToken; 
+        const token = state.accessToken; 
         const headers = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json', 
@@ -24,7 +26,7 @@ export default {
 
     async fetchTests({commit}) {
       try {
-        const token = rootState.auth.accessToken; 
+        const token = state.accessToken; 
         const headers = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json', 
@@ -46,7 +48,7 @@ export default {
     },
     async fetchUsers({commit}) {
       try {
-        const token = rootState.auth.accessToken; 
+        const token = state.accessToken; 
         const headers = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json', 

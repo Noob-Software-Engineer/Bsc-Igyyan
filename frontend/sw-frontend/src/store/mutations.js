@@ -2,13 +2,11 @@ export default {
     setToken(state, token) {
       state.token = token;
     },
-    setDisplayName(state, displayName) {
-      state.displayName = displayName;
+    setName(state, name) {
+      state.name = name;
     },
-    setRoles(state, roles) {
-      state.superAdmin = roles.superAdmin;
-      state.admin = roles.admin;
-      state.student = roles.student;
+    setRoles(state, role) {
+      state.role = role;
     },
     setPosts(state, posts) {
       state.posts = posts;

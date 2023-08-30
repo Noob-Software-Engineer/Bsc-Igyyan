@@ -16,7 +16,7 @@
 </template>
   
 <script>
-  import { computed } from 'vue';
+  import { onMounted,ref, computed } from 'vue';
   import { useStore } from 'vuex';
   import AddTestModal from '@/components/AddTestModal.vue';
 import SearchBarTest from '@/components/SearchBarTest.vue';
@@ -32,7 +32,7 @@ import SearchBarTest from '@/components/SearchBarTest.vue';
       const tests = computed(() => store.state.tests);
       const showAddTestModal = ref(false);
 
-      onCreated(async () => {
+      onMounted(async () => {
         await store.dispatch('fetchTests')
       })
 

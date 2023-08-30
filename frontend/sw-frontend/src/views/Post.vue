@@ -16,7 +16,7 @@
 </template>
   
 <script>
-  import { computed } from 'vue';
+  import { onMounted,ref, computed } from 'vue';
   import { useStore } from 'vuex';
   import AddPostModal from '@/components/AddPostModal.vue';
   import SearchBarPost from '@/components/SearchBarPost.vue';
@@ -32,7 +32,7 @@
       const posts = computed(() => store.state.posts);
       const showAddPostModal = ref(false);
 
-      onCreated(async () => {
+      onMounted(async () => {
         await store.dispatch('fetchPosts')
       })
       const addPost = async (newPost) => {
