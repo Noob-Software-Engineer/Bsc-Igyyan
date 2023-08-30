@@ -30,7 +30,7 @@
             const response = await fetch(url, {
               method: 'GET',
               headers: {
-                'Authorization': `Bearer ${store.state.token}`,
+                'Authorization': `Bearer ${store.state.token.value}`,
                 'Content-Type': 'application/json',
               },
             });

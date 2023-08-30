@@ -50,6 +50,8 @@
       const selectedReview = ref(1);
 
       const reviewScores = [1,2,3,4,5];
+      const availableTags = ['DSA', 'DBMS', 'OS', 'OOP', 'NETWORKING', 'AI', 'ML', 'WEB_DEV', 'OTHER'];
+      const availableType = ['PLACEMENT', 'PRACTICE', 'MOCK', 'OTHER'];
   
 
       const addTest = async () => {

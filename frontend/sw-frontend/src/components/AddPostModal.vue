@@ -35,6 +35,7 @@
       const title = ref('');
       const content = ref('');
       const selectedTags = ref([]);
+      const availableTags = ['JOB', 'INTERNSHIP', 'APTITUDE', 'PROGRAMMING', 'INTERVIEW_TIPS', 'RESUME_BUILDING', 'CAREER_ADVICE']
   
 
       const addPost = async () => {
