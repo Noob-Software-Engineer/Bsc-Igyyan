@@ -26,6 +26,7 @@
       EditPostModal
     },
     setup(props) {
+      const BASE_URL = import.meta.env.VITE_API
       const store = useStore();
       const router = useRouter();
       const post = computed(() => store.state.posts.posts.find(p => p.id === props.id));
@@ -35,7 +36,7 @@
       const deletePost = async () => {
          // Make a delete request to the server to delete the post
         try {
-          const url = `http://localhost:5000/posts/${props.id}`;
+          const url = `${BASE_URL}/posts/${props.id}`;
           const response = await fetch(url, {
             method: 'DELETE',
             headers: {
@@ -56,7 +57,7 @@
 
       const updatePost = async (editedPost) => {
       try {
-        const url = `http://localhost:5000/posts/${props.id}`;
+        const url = `${BASE_URL}/posts/${props.id}`;
         const response = await fetch(url, {
           method: 'PATCH',
           headers: {

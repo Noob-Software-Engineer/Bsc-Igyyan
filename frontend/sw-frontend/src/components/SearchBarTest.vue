@@ -33,6 +33,8 @@
       const store = useStore();
       const searchTerm = ref('');
       const searchResults = ref([]);
+      const BASE_URL = import.meta.env.VITE_API
+
       
       // Create a computed property that watches the searchTerm and fetches results accordingly
       const fetchResults = computed(() => {
@@ -40,7 +42,7 @@
         watchEffect(async () => {
           if (searchTerm.value.length >= 3) {
             // Fetch posts based on search term
-            const url = `http://localhost:5000/tests?=${searchTerm.value}`;
+            const url = `${BASE_URL}/tests?=${searchTerm.value}`;
             const response = await fetch(url, {
               method: 'GET',
               headers: {

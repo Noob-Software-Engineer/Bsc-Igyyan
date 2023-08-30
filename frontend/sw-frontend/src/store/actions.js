@@ -1,6 +1,8 @@
 import state from "./state";
+const BASE_URL = import.meta.env.VITE_API
 
 export default {
+  
     async fetchPosts({commit}) {
       try {
         const token = localStorage.getItem('token'); 
@@ -9,7 +11,7 @@ export default {
           'Content-Type': 'application/json', 
         };
   
-        const response = await fetch('http://localhost:5000/posts', {
+        const response = await fetch(`${BASE_URL}/posts`, {
           headers,
         });
   
@@ -32,7 +34,7 @@ export default {
           'Content-Type': 'application/json', 
         };
   
-        const response = await fetch('http://localhost:5000/tests', {
+        const response = await fetch(`${BASE_URL}/tests`, {
           headers,
         });
   
@@ -54,7 +56,7 @@ export default {
           'Content-Type': 'application/json', 
         };
   
-        const response = await fetch('http://localhost:5000/auth', {
+        const response = await fetch(`${BASE_URL}/auth`, {
           headers,
         });
   
