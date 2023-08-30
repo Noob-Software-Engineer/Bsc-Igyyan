@@ -5,10 +5,10 @@
       <h1>Test</h1>
       <search-bar-test :delay="500"></search-bar-test>
       <ul class="list-group">
-        <li v-for="test in tests" :key="test.id" class="list-group-item">
+        <li v-for="test in tests.tests" :key="test.id" class="list-group-item">
           <router-link :to="'/test/' + test.id">{{ test.title }}</router-link>
-          <p>Username: {{ test.username }}</p>
-          <p>Tags: {{ test.tags.join(', ') }}</p>
+          <p>Username: {{ test.created_by.display_name }}</p>
+          <p>Tags: {{ test.tag }}</p>
         </li>
       </ul>
       <button class="btn btn-primary mt-2" @click="showAddTestModal = true">Add New Test</button>
@@ -48,14 +48,14 @@
         const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${store.state.token.value}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(newTest),
         });
 
         if (response.ok) {
-          tests.value.push(newTest); // Add the new Test to the Tests array
+          store.dispatch('fetchTests');
           showAddTestModal.value = false; // Close the modal
         } else {
           console.error('Error adding Test:', response.statusText);

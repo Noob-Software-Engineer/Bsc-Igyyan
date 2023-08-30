@@ -7,10 +7,10 @@
         <search-bar-post :delay="500"></search-bar-post>
       </div>
       <ul class="list-group">
-        <li v-for="post in posts" :key="post.id" class="list-group-item">
-          <router-link :to="'/post/' + post.id">{{ post.title }}</router-link>
-          <p class="mb-0">Username: {{ post.username }}</p>
-          <p>Tags: {{ post.tags.join(', ') }}</p>
+        <li v-for="post in posts.posts" :key="post.id" class="list-group-item">
+          <router-link :to='"/posts/" + post.id'>{{ post.title }}</router-link>
+          <p class="mb-0">Username: {{ post.created_by.display_name }}</p>
+          <p>Tags: {{ post.tag}}</p>
         </li>
       </ul>
       <button @click="showAddPostModal = true" class="btn btn-primary mt-4">Add New Post</button>
@@ -49,14 +49,14 @@
         const response = await fetch(url, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${store.state.token.value}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(newPost),
         });
 
         if (response.ok) {
-          posts.value.push(newPost); // Add the new post to the posts array
+          store.dispatch('fetchPosts');
           showAddPostModal.value = false; // Close the modal
         } else {
           console.error('Error adding post:', response.statusText);

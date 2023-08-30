@@ -4,5 +4,4 @@ export default {
     posts: [], 
     tests: [],
     users: [],
-    token: null,
 };

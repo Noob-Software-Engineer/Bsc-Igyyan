@@ -3,7 +3,7 @@ import state from "./state";
 export default {
     async fetchPosts({commit}) {
       try {
-        const token = state.accessToken; 
+        const token = localStorage.getItem('token'); 
         const headers = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json', 
@@ -26,7 +26,7 @@ export default {
 
     async fetchTests({commit}) {
       try {
-        const token = state.accessToken; 
+        const token = localStorage.getItem('token'); 
         const headers = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json', 
@@ -48,7 +48,7 @@ export default {
     },
     async fetchUsers({commit}) {
       try {
-        const token = state.accessToken; 
+        const token = localStorage.getItem('token'); 
         const headers = {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json', 

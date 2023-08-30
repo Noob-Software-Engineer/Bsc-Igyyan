@@ -1,10 +1,9 @@
 <template>
   <div>
-    <navbar></navbar>
     <div class="container my-4">
       <h2>{{ test.title }}</h2>
-      <p>Username: {{ test.username }}</p>
-      <p>Tags: {{ test.tags.join(', ') }}</p>
+      <p>Username: {{ test.created_by.display_name}}</p>
+      <p>Tags: {{ test.tag}}</p>
       <p>{{ test.content }}</p>
       <div class="mt-2" v-if="isCurrentUserCreator">
         <button class="btn btn-danger mr-2" @click="deleteTest">Delete Test</button>
@@ -17,9 +16,9 @@
 </template>
   
 <script>
-  import { computed } from 'vue';
+  import { ref, computed } from 'vue';
   import { useStore } from 'vuex';
-  import EditTestModal from '../components/EditTestModal.vue';
+  import EditTestModal from '@/components/EditTestModal.vue';
   
   export default {
     name: 'testDetails',
@@ -29,9 +28,9 @@
     },
     setup(props) {
       const store = useStore();
-      const test = computed(() => store.state.tests.find(p => p.id === props.id));
+      const test = computed(() => store.state.tests.tests.find(p => p.id === props.id));
       const showEditModal = ref(false);
-      const isCurrentUser = computed(() => store.state.displayName === test.value.username);
+      const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === test.value.created_by.display_name);
     
       const deleteTest = async () => {
         try {
@@ -39,7 +38,7 @@
           const response = await fetch(url, {
             method: 'DELETE',
             headers: {
-              'Authorization': `Bearer ${store.state.token.value}`,
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
               'Content-Type': 'application/json',
             },
           });
@@ -60,7 +59,7 @@
         const response = await fetch(url, {
           method: 'PATCH',
           headers: {
-            'Authorization': `Bearer ${store.state.token.value}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(editedTest),
@@ -81,7 +80,7 @@
   
       return {
         test,
-        isCurrentUser,
+        isCurrentUserCreator,
         showEditModal,
         updateTest,
         deleteTest,

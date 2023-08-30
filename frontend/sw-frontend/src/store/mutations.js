@@ -1,13 +1,4 @@
 export default {
-    setToken(state, token) {
-      state.token = token;
-    },
-    setName(state, name) {
-      state.name = name;
-    },
-    setRoles(state, role) {
-      state.role = role;
-    },
     setPosts(state, posts) {
       state.posts = posts;
     },

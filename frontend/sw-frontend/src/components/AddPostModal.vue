@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
               <label for="tags">Tags:</label>
-              <select class="form-control" v-model="selectedTags" multiple>
+              <select class="form-control" v-model="selectedTags">
                 <option v-for="tag in availableTags" :key="tag" :value="tag">{{ tag }}</option>
               </select>
             </div>
@@ -47,41 +47,18 @@
     setup(props, { emit }) {
       const title = ref('');
       const content = ref('');
-      const selectedTags = ref([]);
-      const availableTags = ['JOB', 'INTERNSHIP', 'APTITUDE', 'PROGRAMMING', 'INTERVIEW_TIPS', 'RESUME_BUILDING', 'CAREER_ADVICE']
+      const selectedTags = ref('');
+      const availableTags = ['job', 'internship', 'aptitude', 'programming', 'interview_tips', 'resume_building', 'career_advice']
   
-
-      const addPost = async () => {
-        const newPost = {
+      const addPost = () => {
+          const newPost = {
             title: title.value,
             content: content.value,
-            tags: selectedTags.value, // Pass the selected tags
+            tag: selectedTags.value, // Pass the selected tags
         };
-
-        try {
-            const url = 'http://localhost:5000/posts'; 
-            const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${store.state.token.value}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newPost),
-            });
-
-            if (response.ok) {
-                emit('add', newPost);
-                title.value = '';
-                content.value = '';
-                selectedTags.value = []; // Emit the 'add' event to the parent component
-                closeModal();
-            } else {
-                console.error('Error adding post:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error adding post:', error);
-        }
-      };
+        console.log(selectedTags.value);
+        emit('add', newPost);
+      }
   
       const closeModal = () => {
         emit('close');
@@ -89,9 +66,11 @@
   
       return {
         title,
+        content,
         addPost,
         closeModal,
         selectedTags,
+        availableTags,
       };
     },
   };

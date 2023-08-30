@@ -26,7 +26,7 @@
 
 <script>
     import { ref } from 'vue';
-    import { useRouter } from 'vue-router'
+    import {useRouter} from 'vue-router';
     import { useStore } from 'vuex';
     import jwt_decode from "jwt-decode";
     export default {
@@ -52,9 +52,9 @@
                 .then(res => res.json())
                 .then(data => {
                     var decoded = jwt_decode(data.access_token);
-                    store.commit('setName', decoded.sub.name)
-                    store.commit('setRoles', decoded.sub.role)
-                    store.commit('setToken', data.access_token)
+                    localStorage.setItem('display_name', decoded.sub.name)
+                    localStorage.setItem('role', decoded.sub.role)
+                    localStorage.setItem('token',data.access_token);
                     console.log(store)
                     
                     router.push('/posts')

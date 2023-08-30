@@ -1,8 +1,8 @@
 <template>
   <div class="container my-4">
     <h2>{{ post.title }}</h2>
-    <p>Username: {{ post.username }}</p>
-    <p>Tags: {{ post.tags.join(', ') }}</p>
+    <p>Username: {{ post.created_by.display_name }}</p>
+    <p>Tags: {{ post.tag }}</p>
     <p>{{ post.content }}</p> 
     <div v-if="isCurrentUserCreator">
       <button class="btn btn-danger" @click="deletePost">Delete Post</button>
@@ -14,9 +14,9 @@
 </template>
   
 <script>
-  import { computed } from 'vue';
+  import { ref, computed } from 'vue';
   import { useStore } from 'vuex';
-  import EditPostModal from '../components/EditPostModal.vue';
+  import EditPostModal from '@/components/EditPostModal.vue';
   
   export default {
     name: 'PostDetails',
@@ -26,8 +26,8 @@
     },
     setup(props) {
       const store = useStore();
-      const post = computed(() => store.state.posts.find(p => p.id === props.id));
-      const isCurrentUserCreator = computed(() => store.state.displayName === post.value.username);
+      const post = computed(() => store.state.posts.posts.find(p => p.id === props.id));
+      const isCurrentUserCreator = computed(() => localStorage.getItem('display_name') === post.created_by.display_name);
       const showEditModal = ref(false);
 
       const deletePost = async () => {
@@ -37,7 +37,7 @@
           const response = await fetch(url, {
             method: 'DELETE',
             headers: {
-              'Authorization': `Bearer ${store.state.token.value}`,
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
               'Content-Type': 'application/json',
             },
           });
@@ -59,7 +59,7 @@
         const response = await fetch(url, {
           method: 'PATCH',
           headers: {
-            'Authorization': `Bearer ${store.state.token.value}`,
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(editedPost),

@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
               <label for="tags">Tags:</label>
-              <select class="form-control" v-model="selectedTags" multiple>
+              <select class="form-control" v-model="selectedTags">
                 <option v-for="tag in availableTags" :key="tag" :value="tag">{{ tag }}</option>
               </select>
             </div>
@@ -60,49 +60,26 @@
     setup(props, { emit }) {
       const title = ref('');
       const content = ref('');
-      const selectedTags = ref([]);
+      const selectedTags = ref('');
       const selectedType = ref('');
       const selectedReview = ref(1);
 
       const reviewScores = [1,2,3,4,5];
-      const availableTags = ['DSA', 'DBMS', 'OS', 'OOP', 'NETWORKING', 'AI', 'ML', 'WEB_DEV', 'OTHER'];
-      const availableType = ['PLACEMENT', 'PRACTICE', 'MOCK', 'OTHER'];
+      const availableTags = ['Data Structures and Algorithms', 'Database Management Systems',
+       'Operating Systems', 'Object-Oriented Programming', 'Computer Networking', 'Artificial Intelligence',
+        'Machine Learning', 'Web Development', 'Other'];
+      const availableType = ['Placement Test', 'Practice Test', 'Mock Test', 'Other'];
   
 
-      const addTest = async () => {
+      const addTest = () => {
         const newTest = {
             title: title.value,
             content: content.value,
-            tags: selectedTags.value,
+            tag: selectedTags.value,
             type: selectedType.value,
             review: selectedReview.value, // Pass the selected tags
         };
-
-        try {
-            const url = 'http://localhost:5000/Tests'; 
-            const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${store.state.token.value}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newTest),
-            });
-
-            if (response.ok) {
-                emit('add', newTest);
-                title.value = '';
-                content.value = '';
-                selectedTags.value = [];
-                selectedType.value = '';
-                selectedReview.value = 1;
-                closeModal();
-            } else {
-                console.error('Error adding Test:', response.statusText);
-            }
-        } catch (error) {
-            console.error('Error adding Test:', error);
-        }
+          emit('add', newTest);
       };
   
       const closeModal = () => {
@@ -111,12 +88,15 @@
   
       return {
         title,
+        content,
         addTest,
         closeModal,
         selectedTags,
         selectedType,
         selectedReview,
         reviewScores,
+        availableTags,
+        availableType,
       };
     },
   };

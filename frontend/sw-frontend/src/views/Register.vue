@@ -32,11 +32,11 @@
         </div>
       </div>
     </div>
-  </template>
+</template>
 
 <script>
     import { ref } from 'vue';
-    import { useRouter } from 'vue-router'
+    import { useRouter } from 'vue-router';
     export default {
         setup () {
             const name = ref('')

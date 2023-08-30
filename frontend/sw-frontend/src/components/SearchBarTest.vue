@@ -44,7 +44,7 @@
             const response = await fetch(url, {
               method: 'GET',
               headers: {
-                'Authorization': `Bearer ${store.state.token.value}`,
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
               },
             });
